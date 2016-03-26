@@ -51,105 +51,84 @@ namespace GildedRose.Tests
         public void
         Once_sell_passed_quality_degrades_twice_as_fast()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = "Elixir of the Mongoose", SellIn = 0, Quality = 2 }
-            };
-            
+            var stock = CreateSingleStockItemWith(name: "Elixir of the Mongoose", sellIn: 0, quality: 2);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(0, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(0, actual.Quality);
         }
 
         [Fact]
         public void
         Quality_never_goes_negative()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = "Elixir of the Mongoose", SellIn = 1, Quality = 0 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: "Elixir of the Mongoose", sellIn: 1, quality: 0);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(0, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(0, actual.Quality);
         }
 
         [Fact]
         public void
         Aged_brie_increases_in_quality_the_older_it_gets()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.AGED_BRIE, SellIn = 1, Quality = 0 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: EndOfDay.AGED_BRIE, sellIn: 1, quality: 0);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(1, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(1, actual.Quality);
         }
 
         [Fact]
         public void
         Quality_never_goes_above_50()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.AGED_BRIE, SellIn = 1, Quality = 50 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: EndOfDay.AGED_BRIE, sellIn: 1, quality: 50);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(50, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(50, actual.Quality);
         }
 
         [Fact]
         public void
         Sulfuras_do_not_decrease_in_quality()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.SULFURAS, SellIn = 1, Quality = 1 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: EndOfDay.SULFURAS, sellIn: 1, quality: 1);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(1, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(1, actual.Quality);
         }
 
         [Fact]
         public void
         Sulfuras_do_not_decrease_in_sell_in()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.SULFURAS, SellIn = 1, Quality = 1 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: EndOfDay.SULFURAS, sellIn: 1, quality: 1);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(1, stock[0].SellIn);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(1, actual.SellIn);
         }
 
         [Fact]
         public void
         Backstage_passes_increase_in_quality_by_1_over_10_days()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.BACKSTAGE_PASSES, SellIn = 11, Quality = 0 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: EndOfDay.BACKSTAGE_PASSES, sellIn: 11, quality: 0);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(1, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(1, actual.Quality);
         }
 
         [Theory]
@@ -161,15 +140,12 @@ namespace GildedRose.Tests
         public void
         Backstage_passes_increase_in_quality_by_2_between_6_to_10_days(int days)
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.BACKSTAGE_PASSES, SellIn = days, Quality = 0 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: EndOfDay.BACKSTAGE_PASSES, sellIn: days, quality: 0);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(2, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(2, actual.Quality);
         }
 
         [Theory]
@@ -181,29 +157,32 @@ namespace GildedRose.Tests
         public void
         Backstage_passes_increase_in_quality_by_3_between_5_to_1_days(int days)
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.BACKSTAGE_PASSES, SellIn = days, Quality = 0 }
-            };
-
+            IList<Item> stock = CreateSingleStockItemWith(name: EndOfDay.BACKSTAGE_PASSES, sellIn: days, quality: 0);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
+            var actual = endOfDay.Stock[0];
 
-            Assert.Equal(3, stock[0].Quality);
+            Assert.Equal(3, actual.Quality);
         }
 
+        [Fact]
         public void
         Backstage_passes_quality_is_zero_after_concert()
         {
-            IList<Item> stock = new List<Item>
-            {
-                new Item { Name = EndOfDay.BACKSTAGE_PASSES, SellIn = 0, Quality = 3 }
-            };
-
+            var stock = CreateSingleStockItemWith(name: EndOfDay.BACKSTAGE_PASSES, sellIn: 0, quality: 3);
             var endOfDay = new EndOfDay(stock);
             endOfDay.UpdateQuality();
 
-            Assert.Equal(0, stock[0].Quality);
+            var actual = endOfDay.Stock[0];
+            Assert.Equal(0, actual.Quality);
+        }
+
+        private static IList<Item> CreateSingleStockItemWith(string name, int sellIn, int quality)
+        {
+            return new List<Item>
+            {
+                new Item { Name = name, SellIn = sellIn, Quality = quality }
+            };
         }
     }
 }
